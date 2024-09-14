@@ -181,7 +181,7 @@ export async function initPage(
       ),
       page.waitForNavigation(),
     ]);
-    await page.waitForTimeout(Timeout.longTimeWait);
+    await page.waitForTimeout(2 * Timeout.longTimeWait);
     console.log("click add button");
 
     const addBtn = await page?.waitForSelector("button>span:has-text('Add')");
@@ -226,7 +226,7 @@ export async function initPage(
     } else {
       await addBtn?.click();
     }
-    await page.waitForTimeout(Timeout.shortTimeLoading);
+    await page.waitForTimeout(Timeout.longTimeWait * 2);
     // verify add page is closed
     await page?.waitForSelector("button>span:has-text('Add')", {
       state: "detached",
