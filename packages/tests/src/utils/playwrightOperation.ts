@@ -240,7 +240,9 @@ export async function initPage(
     await page?.waitForSelector("button>span:has-text('Add')", {
       state: "detached",
     });
-    await page?.waitForSelector("button:has-text('Open')");
+    await page?.waitForSelector(
+      "button[data-testid='open-app'][data-tid='open-app']"
+    );
     console.log("[success] app loaded");
     await page.waitForTimeout(Timeout.longTimeWait);
   });
@@ -315,7 +317,17 @@ export async function reopenPage(
     await page.waitForTimeout(Timeout.shortTimeLoading);
     if (addApp) {
       console.log("click add button");
-      const addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+      let addBtn;
+      try {
+        addBtn = await page?.waitForSelector("button>span:has-text('Open')");
+      } catch {
+        await page?.waitForSelector("button>span:has-text('Add')");
+        await page.screenshot({
+          path: getPlaywrightScreenshotPath("add_page"),
+          fullPage: true,
+        });
+        throw "error";
+      }
 
       // dashboard template will have a popup
       if (options?.dashboardFlag && password) {
@@ -363,6 +375,9 @@ export async function reopenPage(
       await page?.waitForSelector("button>span:has-text('Add')", {
         state: "detached",
       });
+      await page?.waitForSelector(
+        "button[data-testid='open-app'][data-tid='open-app']"
+      );
     }
     await page.waitForTimeout(Timeout.longTimeWait);
   });
