@@ -240,9 +240,10 @@ export async function initPage(
     await page?.waitForSelector("button>span:has-text('Add')", {
       state: "detached",
     });
-    await page?.waitForSelector(
+    const openApp = await page?.waitForSelector(
       "button[data-testid='open-app'][data-tid='open-app']"
     );
+    await openApp.click();
     console.log("[success] app loaded");
     await page.waitForTimeout(Timeout.longTimeWait);
   });
@@ -375,9 +376,10 @@ export async function reopenPage(
       await page?.waitForSelector("button>span:has-text('Add')", {
         state: "detached",
       });
-      await page?.waitForSelector(
+      const openApp = await page?.waitForSelector(
         "button[data-testid='open-app'][data-tid='open-app']"
       );
+      await openApp.click();
     }
     await page.waitForTimeout(Timeout.longTimeWait);
   });
