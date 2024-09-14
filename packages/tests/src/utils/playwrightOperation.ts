@@ -181,12 +181,13 @@ export async function initPage(
       ),
       page.waitForNavigation(),
     ]);
-    await page.waitForTimeout(2 * Timeout.longTimeWait);
+    await page.waitForTimeout(Timeout.longTimeWait);
     console.log("click add button");
     let addBtn;
     try {
-      addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+      addBtn = await page?.waitForSelector("button>span:has-text('Open')");
     } catch {
+      await page?.waitForSelector("button>span:has-text('Add')");
       await page.screenshot({
         path: getPlaywrightScreenshotPath("add_page"),
         fullPage: true,
@@ -234,11 +235,12 @@ export async function initPage(
     } else {
       await addBtn?.click();
     }
-    await page.waitForTimeout(Timeout.shortTimeLoading);
+    await page.waitForTimeout(Timeout.longTimeWait);
     // verify add page is closed
     await page?.waitForSelector("button>span:has-text('Add')", {
       state: "detached",
     });
+    await page?.waitForSelector("button:has-text('Open')");
     console.log("[success] app loaded");
     await page.waitForTimeout(Timeout.longTimeWait);
   });
