@@ -187,12 +187,15 @@ export async function initPage(
     try {
       addBtn = await page?.waitForSelector("button>span:has-text('Open')");
     } catch {
-      await page?.waitForSelector("button>span:has-text('Add')");
-      await page.screenshot({
-        path: getPlaywrightScreenshotPath("add_page"),
-        fullPage: true,
-      });
-      throw "error";
+      try {
+        addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+      } catch {
+        await page.screenshot({
+          path: getPlaywrightScreenshotPath("add_page"),
+          fullPage: true,
+        });
+        throw "error to add app";
+      }
     }
 
     // dashboard template will have a popup
@@ -322,12 +325,15 @@ export async function reopenPage(
       try {
         addBtn = await page?.waitForSelector("button>span:has-text('Open')");
       } catch {
-        await page?.waitForSelector("button>span:has-text('Add')");
-        await page.screenshot({
-          path: getPlaywrightScreenshotPath("add_page"),
-          fullPage: true,
-        });
-        throw "error";
+        try {
+          addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+        } catch {
+          await page.screenshot({
+            path: getPlaywrightScreenshotPath("add_page"),
+            fullPage: true,
+          });
+          throw "error to add app";
+        }
       }
 
       // dashboard template will have a popup
