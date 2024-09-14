@@ -238,7 +238,7 @@ export async function initPage(
     } else {
       await addBtn?.click();
     }
-    await page.waitForTimeout(Timeout.longTimeWait);
+    await page.waitForTimeout(Timeout.shortTimeLoading);
     // verify add page is closed
     try {
       await page?.waitForSelector("button>span:has-text('Add')", {
@@ -250,9 +250,8 @@ export async function initPage(
       });
     }
     try {
-      const openApp = await page?.waitForSelector(
-        "button[data-testid='open-app'][data-tid='open-app']"
-      );
+      const openApp = await page?.waitForSelector("button:has-text('Open')");
+      console.log("clicked open app");
       await openApp.click();
     } catch {
       console.log("No Open App button");
@@ -399,9 +398,8 @@ export async function reopenPage(
         });
       }
       try {
-        const openApp = await page?.waitForSelector(
-          "button[data-testid='open-app'][data-tid='open-app']"
-        );
+        const openApp = await page?.waitForSelector("button:has-text('Open')");
+        console.log("clicked open app");
         await openApp.click();
       } catch {
         console.log("No Open App button");
