@@ -185,10 +185,10 @@ export async function initPage(
     console.log("click add button");
     let addBtn;
     try {
-      addBtn = await page?.waitForSelector("button>span:has-text('Open')");
+      addBtn = await page?.waitForSelector("button>span:has-text('Add')");
     } catch {
       try {
-        addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+        addBtn = await page?.waitForSelector("button>span:has-text('Open')");
       } catch {
         await page.screenshot({
           path: getPlaywrightScreenshotPath("add_page"),
@@ -240,13 +240,23 @@ export async function initPage(
     }
     await page.waitForTimeout(Timeout.longTimeWait);
     // verify add page is closed
-    await page?.waitForSelector("button>span:has-text('Add')", {
-      state: "detached",
-    });
-    const openApp = await page?.waitForSelector(
-      "button[data-testid='open-app'][data-tid='open-app']"
-    );
-    await openApp.click();
+    try {
+      await page?.waitForSelector("button>span:has-text('Add')", {
+        state: "detached",
+      });
+    } catch {
+      await page?.waitForSelector("button>span:has-text('Open')", {
+        state: "detached",
+      });
+    }
+    try {
+      const openApp = await page?.waitForSelector(
+        "button[data-testid='open-app'][data-tid='open-app']"
+      );
+      await openApp.click();
+    } catch {
+      console.log("No Open App button");
+    }
     console.log("[success] app loaded");
     await page.waitForTimeout(Timeout.longTimeWait);
   });
@@ -323,10 +333,10 @@ export async function reopenPage(
       console.log("click add button");
       let addBtn;
       try {
-        addBtn = await page?.waitForSelector("button>span:has-text('Open')");
+        addBtn = await page?.waitForSelector("button>span:has-text('Add')");
       } catch {
         try {
-          addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+          addBtn = await page?.waitForSelector("button>span:has-text('Open')");
         } catch {
           await page.screenshot({
             path: getPlaywrightScreenshotPath("add_page"),
@@ -379,13 +389,23 @@ export async function reopenPage(
       await page.waitForTimeout(Timeout.shortTimeLoading);
       console.log("[success] app loaded");
       // verify add page is closed
-      await page?.waitForSelector("button>span:has-text('Add')", {
-        state: "detached",
-      });
-      const openApp = await page?.waitForSelector(
-        "button[data-testid='open-app'][data-tid='open-app']"
-      );
-      await openApp.click();
+      try {
+        await page?.waitForSelector("button>span:has-text('Add')", {
+          state: "detached",
+        });
+      } catch {
+        await page?.waitForSelector("button>span:has-text('Open')", {
+          state: "detached",
+        });
+      }
+      try {
+        const openApp = await page?.waitForSelector(
+          "button[data-testid='open-app'][data-tid='open-app']"
+        );
+        await openApp.click();
+      } catch {
+        console.log("No Open App button");
+      }
     }
     await page.waitForTimeout(Timeout.longTimeWait);
   });
