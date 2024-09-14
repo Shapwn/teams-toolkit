@@ -183,8 +183,16 @@ export async function initPage(
     ]);
     await page.waitForTimeout(2 * Timeout.longTimeWait);
     console.log("click add button");
-
-    const addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+    let addBtn;
+    try {
+      addBtn = await page?.waitForSelector("button>span:has-text('Add')");
+    } catch {
+      await page.screenshot({
+        path: getPlaywrightScreenshotPath("add_page"),
+        fullPage: true,
+      });
+      throw "error";
+    }
 
     // dashboard template will have a popup
     if (options?.dashboardFlag) {
@@ -226,7 +234,7 @@ export async function initPage(
     } else {
       await addBtn?.click();
     }
-    await page.waitForTimeout(Timeout.longTimeWait * 2);
+    await page.waitForTimeout(Timeout.shortTimeLoading);
     // verify add page is closed
     await page?.waitForSelector("button>span:has-text('Add')", {
       state: "detached",
